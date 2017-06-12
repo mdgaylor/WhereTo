@@ -1,5 +1,6 @@
 # WhereTo
 
 Travel sharing application where users can interact with friends based off of shared interests in travel locations.
-\nAuthors: Matt Gaylor and Josh Bean
-\nIdea guy: Nigel Hall
+<br />
+Authors: Matt Gaylor and Josh Bean
+Idea guy: Nigel Hall
