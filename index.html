@@ -8,13 +8,20 @@
   </head>
   <body>
     <h1>WhereTo?</h1>
-    <div id="search">
-      <form>
-        Location:<br>
-        <input id="locationInput" type="text" name="location"><br>
+
+    <div id="pac-card">
+      <div>
+        <div id="title">
+          Location
+        </div>
+      </div>
+      <div id="pac-container">
+        <input id="pac-input" type="text"
+            placeholder="Enter a location">
         <input id="execSearch" type="submit" value="Search">
-      </form>
+      </div>
     </div>
+
     <div id="map"></div>
 
     <script src="index.js"></script>
