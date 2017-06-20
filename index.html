@@ -9,13 +9,18 @@
   </head>
   <body>
     <h1>WhereTo?</h1>
-    <div id="search">
-      <form>
-        Location:<br>
-        <input id="locationInput" type="text" name="location"><br>
-        <input id="execSearch" type="button" value="Search">
-      </form>
+
+    <div id="pac-card">
+      <div>
+        <div id="title">
+          Location
+        </div>
+      </div>
+      <div id="pac-container">
+        <input id="pac-input" type="text" placeholder="Enter a location">
+      </div>
     </div>
+
     <div id="map"></div>
     <div>
       <ul id="locationList"></ul>
