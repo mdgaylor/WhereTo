@@ -1,21 +1,14 @@
 var map;
-var searchButton;
-var locationInput;
-var marker
-
+var locationList;
 var locations;
-
-var idCounter;
 
 function initialize() {
   initMap();
   console.log('Map initialized...');
   initSearch();
   console.log('Search bar initialized...');
-
-  searchButton.onclick = executeSearch;
   locations = {};
-  idCounter = 0;
+  locationList = document.getElementById('locationList');
 }
 
 function initMap() {
@@ -23,16 +16,12 @@ function initMap() {
     center: {lat: 0.0, lng: 0.0},
     zoom: 1
   });
-
 }
 
 function initSearch() {
-  searchButton = document.getElementById('execSearch');
-  locationInput = document.getElementById('locationInput');
-  locationList = document.getElementById('locationList');
-
-  var card = document.getElementById('pac-card');
-  var input = document.getElementById('pac-input');
+  var ctrls = document.getElementById('mapControls');
+  // Client text input
+  var input = document.getElementById('mapControlsInput');
   var globalBounds = new google.maps.LatLngBounds(
     new google.maps.LatLng(-90.0, -180.0),
     new google.maps.LatLng(90.0, 180.0));
@@ -42,7 +31,8 @@ function initSearch() {
     types: ['(regions)']
   }
 
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(card);
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(ctrls);
+  // Makes an autocomplete from the user input and options
   var autocomplete = new google.maps.places.Autocomplete(input, options);
 
   autocomplete.addListener('place_changed', function() {
@@ -61,44 +51,23 @@ function initSearch() {
       map.setCenter(place.geometry.location);
       map.setZoom(17);  // Why 17? Because it looks good.
     }
-    
-    var marker = new goole.maps.Marker({
-      postion: place.geometry.location,
+    var marker = new google.maps.Marker({
+      position: place.geometry.location,
       map: map
     });
+    marker.setAnimation(google.maps.Animation.DROP);
+    var listEl = document.createElement('li');
+    var textNode = document.createTextNode(place.name);
+    listEl.appendChild(textNode);
+    listEl.id = place.place_id;
+    listEl.onclick = removeLocation;
+    locations[place.place_id] = marker;
+    locationList.appendChild(listEl);
   });
-
-function removeLocation() {
-  var loc = locations[this.id];
-  loc['marker'].setMap(null);
-  locationList.removeChild(this);
 }
 
-function executeSearch() {
-  var loc = {};
-  loc['location'] = locationInput.value;
-
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4) {
-      var lat = Math.random() * 180.0 - 90.0;
-      var lng = Math.random() * 360.0 - 180.0;
-      loc['marker'] = new google.maps.Marker({
-        position: {lat: lat, lng: lng},
-        map: map
-      });
-      loc['marker'].setAnimation(google.maps.Animation.DROP);
-      var listEl = document.createElement('li');
-      var textNode = document.createTextNode(loc['location']);
-
-      listEl.appendChild(textNode);
-      listEl.id = "LOC_" + idCounter++;
-      locationList.appendChild(listEl);
-
-      listEl.onclick = removeLocation;
-      locations[listEl.id] = loc;
-    }
-  }
-  xhttp.open("GET", "ajax.txt", true);
-  xhttp.send();
+function removeLocation() {
+  var marker = locations[this.id];
+  marker.setMap(null);
+  locationList.removeChild(this);
 }
