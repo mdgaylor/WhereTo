@@ -31,10 +31,12 @@ function initSearch() {
     types: ['(regions)']
   }
 
+  // Puts the map controls in the top left corner of the map
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(ctrls);
   // Makes an autocomplete from the user input and options
   var autocomplete = new google.maps.places.Autocomplete(input, options);
 
+  // Listener for when a location is selected from the autocomplete
   autocomplete.addListener('place_changed', function() {
     var place = autocomplete.getPlace();
     if (!place.geometry) {
@@ -49,18 +51,20 @@ function initSearch() {
       map.fitBounds(place.geometry.viewport);
     } else {
       map.setCenter(place.geometry.location);
-      map.setZoom(17);  // Why 17? Because it looks good.
+      map.setZoom(15);
     }
     var marker = new google.maps.Marker({
       position: place.geometry.location,
       map: map
     });
     marker.setAnimation(google.maps.Animation.DROP);
+
     var listEl = document.createElement('li');
     var textNode = document.createTextNode(place.name);
-    listEl.appendChild(textNode);
     listEl.id = place.place_id;
+    listEl.appendChild(textNode);
     listEl.onclick = removeLocation;
+
     locations[place.place_id] = marker;
     locationList.appendChild(listEl);
   });
@@ -68,6 +72,9 @@ function initSearch() {
 
 function removeLocation() {
   var marker = locations[this.id];
+  if (!marker) {
+    return;
+  }
   marker.setMap(null);
   locationList.removeChild(this);
 }
